@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 hola mundo!
 VETE A TOMAR POR CULO
+=======
+hola mundo!
+VETE A TOMAR POR CULO
+>>>>>>> 1d519fb9b0cbd7a097bba534ca229f599ddf5949
 XD
