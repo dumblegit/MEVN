@@ -2,7 +2,8 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      elevation="5"
+      color="indigo darken-2"
       dark
     >
       <div class="d-flex align-center">
