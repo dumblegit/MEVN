@@ -8,7 +8,7 @@ const tatuajeSchema = new Schema({
   imagenes: Array({type: String})
 });
 
-// Convertir a modelo
+// Conversion a modelo
 const tatuaje = mongoose.model('tatuaje', tatuajeSchema);
 
 export default tatuaje;

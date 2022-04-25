@@ -8,16 +8,16 @@ const usuarioSchema = new Schema({
   fotoPerfil:{type: String},
   usuario:{type: String},
   password:{type: String},
-  citas: Array({type: {
-    idTatuaje:{type: String},
-    tatuador:{type: String},
-    fechaCita:{type: Date},
-    comision:{type: Number},
-    precio:{type: Number}
-  }})
+  citas: Array({
+      idTatuaje:{type: String},
+      tatuador:{type: String},
+      fechaCita:{type: Date},
+      comision:{type: Number},
+      precio:{type: Number}
+  })
 });
 
-// Convertir a modelo
+// Conversion a modelo
 const usuario = mongoose.model('usuario', usuarioSchema);
 
 export default usuario;

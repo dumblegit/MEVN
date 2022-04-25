@@ -1,10 +1,11 @@
 import express from 'express';
+import { json } from 'express/lib/response';
 const router = express.Router();
 
 // importar el modelo usuario
 import usuario from '../models/usuario';
 
-// Agregar una usuario
+// Agregar un usuario
 router.post('/nuevo', async(req, res) => {
   const body = req.body;  
   try {
@@ -72,6 +73,53 @@ router.put('/actualizar/:id', async(req, res) => {
       body,
       {new: true});
     res.json(usuarioDb);  
+  } catch (error) {
+    return res.status(400).json({
+      mensaje: 'Ocurrio un error',
+      error
+    })
+  }
+});
+//Mostrar citas de un usuario
+router.get('/citas/:id', async(req, res) => {
+  const _id = req.params.id;
+  try {
+    const usuarioDb = await usuario.findOne({_id});
+    res.json(usuarioDb.citas)
+  } catch (error) {
+    return res.status(400).json({
+      mensaje: 'Ocurrio un error',
+      error
+    })
+  }
+});
+//Agregar una cita
+router.put('/nuevaCita/:id', async(req, res) => {
+  const _id = req.params.id;
+  const cita = req.body;
+  try {
+    const citaDB = await usuario.findByIdAndUpdate(
+      _id,
+      {$push:{"citas": cita}},
+      {new: true});
+    res.json(citaDB);
+  } catch (error) {
+    return res.status(400).json({
+      mensaje: 'Ocurrio un error',
+      error
+    })
+  }
+});
+//Quitar una cita
+router.put('/borrarCita/:id', async(req, res) => {
+  const _id = req.params.id;
+  const idCita= req.body.id;
+  try {
+    const citaDB = await usuario.findByIdAndUpdate(
+      _id,
+      {$pull:{"citas":{"_id" : idCita}}},
+      {new: true});
+    res.jsonp(citaDB);
   } catch (error) {
     return res.status(400).json({
       mensaje: 'Ocurrio un error',

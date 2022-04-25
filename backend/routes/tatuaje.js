@@ -1,10 +1,7 @@
 import express from 'express';
 const router = express.Router();
-
-// importar el modelo tatuaje
 import tatuaje from '../models/tatuaje';
-
-// Agregar una tatuaje
+// Agregar un tatuaje
 router.post('/nuevo', async(req, res) => {
   const body = req.body;  
   try {
@@ -17,7 +14,7 @@ router.post('/nuevo', async(req, res) => {
     })
   }
 });
-// Get con parámetros
+// Listar un tatuaje
 router.get('/listar/:id', async(req, res) => {
   const _id = req.params.id;
   try {
@@ -30,8 +27,7 @@ router.get('/listar/:id', async(req, res) => {
     })
   }
 });
-
-// Get con todos los documentos
+// Listar todos los tatuajes
 router.get('/listar', async(req, res) => {
   try {
     const tatuajeDb = await tatuaje.find();
@@ -43,7 +39,7 @@ router.get('/listar', async(req, res) => {
     })
   }
 });
-// Delete eliminar un tatuaje
+// Eliminar un tatuaje
 router.delete('/borrar/:id', async(req, res) => {
   const _id = req.params.id;
   try {
@@ -62,7 +58,7 @@ router.delete('/borrar/:id', async(req, res) => {
     })
   }
 });
-// Put actualizar un tatuaje
+// Actualizar un tatuaje
 router.put('/actualizar/:id', async(req, res) => {
   const _id = req.params.id;
   const body = req.body;
@@ -79,11 +75,23 @@ router.put('/actualizar/:id', async(req, res) => {
     })
   }
 });
-// Exportamos la configuración de express app
-//Agregar una imagen
+//Mostrar imagenes de un tatuaje
+router.get('/imagenes/:id', async(req, res) => {
+  const _id = req.params.id;
+  try {
+    const tatuajeDB = await tatuaje.findOne({_id});
+    res.json(tatuajeDB.imagenes);
+  } catch (error) {
+    return res.status(400).json({
+      mensaje: 'Ocurrio un error',
+      error
+    })
+  }
+});
+///Agregar una imagen
 router.put('/nuevaImagen/:id', async(req, res) => {
   const _id = req.params.id;
-  const imagen = req.body.imagen;  
+  const imagen = req.body.imagen;
   try {
     const tatuajeDB = await tatuaje.findByIdAndUpdate(
       _id,
@@ -98,9 +106,9 @@ router.put('/nuevaImagen/:id', async(req, res) => {
   }
 });
 //Quitar una imagen
-router.put('/quitarImagen/:id', async(req, res) => {
+router.put('/borrarImagen/:id', async(req, res) => {
   const _id = req.params.id;
-  const imagen = req.body.imagen;  
+  const imagen = req.body.imagen;
   try {
     const tatuajeDB = await tatuaje.findByIdAndUpdate(
       _id,
@@ -114,4 +122,5 @@ router.put('/quitarImagen/:id', async(req, res) => {
     })
   }
 });
+// Exportamos la configuración de express app
 module.exports = router;
