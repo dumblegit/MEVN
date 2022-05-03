@@ -9,7 +9,6 @@ const usuarioSchema = new Schema({
   usuario:{type: String},
   password:{type: String},
   citas: Array({
-      id: {type: ObjectId},
       idTatuaje:{type: String},
       tatuador:{type: String},
       fechaCita:{type: Date},
