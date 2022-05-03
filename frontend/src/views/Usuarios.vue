@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <h1 class="my-5"><span><h3>🙋‍♂️ 🙋‍♀️</h3></span>Usuarios</h1>
     <table class="table table-striped container mb-5">
       <thead>
@@ -20,8 +19,8 @@
             <td>{{ item.fechaNacimiento }}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <b-button @click="eliminarUsuario(item._id)" class="btn-danger" title="delete">💥</b-button>
               <b-button @click="actualizarUsuario(item)" class="btn-warning" title="edit">🛠</b-button>
+              <b-button @click="eliminarUsuario(item._id)" class="btn-danger" title="delete">💥</b-button>
             </div>
           </td>
         </tr>
@@ -131,5 +130,9 @@ export default {
     background-color:#82a5c7;
     color: #243241;
     border-radius: 10px;
+  }
+  a{
+    color: #328b63;
+    text-decoration: none;
   }
 </style>
