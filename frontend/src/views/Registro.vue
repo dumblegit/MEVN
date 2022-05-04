@@ -174,6 +174,10 @@ export default {
         color: #243241;
         border-radius: 10px;
     }
+    input{
+        background-color: #243241!important;
+        color: #82a5c7!important;
+    }
     #enviar{
         background-color:#82a5c7;
         color: #243241;
