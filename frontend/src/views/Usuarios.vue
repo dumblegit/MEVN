@@ -19,7 +19,7 @@
             <td>{{ item.fechaNacimiento }}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <b-button @click="actualizarUsuario(item)" class="btn-warning" title="edit">🛠</b-button>
+              <b-button @click="editarUsuario(item._id)" class="btn-warning" title="edit">🛠</b-button> 
               <b-button @click="eliminarUsuario(item._id)" class="btn-danger" title="delete">💥</b-button>
             </div>
           </td>
@@ -72,21 +72,8 @@ export default {
           console.log(e.response);
         });
     },
-    agregarUsuario() {
-      //console.log(this.usuario);
-      this.axios.post("/usuarios/nuevo", this.usuario)
-        .then((res) => {
-          this.usuarios.push(res.data);
-          this.usuario.nombre = "";
-          this.usuario.tatuador = false;
-          this.usuario.fotoPerfil = "";
-          this.usuario.fechaNacimiento = new Date();
-          this.usuario.usuario = "";
-          this.usuario.password = "";
-        })
-        .catch((e) => {
-          console.log(e.response);
-        });
+    editarUsuario(id){
+      window.location.href="/usuarios/editar?id="+id;
     },
     eliminarUsuario(id) {
       this.axios.delete("/usuarios/borrar/" + id).then((res) => {
@@ -98,22 +85,6 @@ export default {
         this.mensaje.texto = "Usuario eliminado con exito!";
         this.showAlert();
       });
-    },
-    actualizarUsuario(item){
-      this.axios.put('/usuarios/actualizar/' + item._id, item)
-      .then((res) => {
-        const index = this.usuario.findIndex(n => n._id === res.data._id);
-        this.usuario[index].nombre = "edit";
-        this.usuario[index].tatuador = true;
-        this.usuario[index].fotoPerfil = "edit";
-        this.usuario[index].fechaNacimiento = new Date();
-        this.usuario[index].usuario = "edit";
-        this.usuario[index].password = "edit";
-      })
-      .catch((e) => {
-        console.log(e.response);
-      })
-
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
