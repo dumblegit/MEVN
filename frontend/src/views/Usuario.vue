@@ -4,7 +4,6 @@
     <table class="table table-striped container mb-5">
       <thead>
         <tr>
-          <th scope="col">Perfil</th>
           <th scope="col">Nombre</th>
           <th scope="col">Nick</th>
           <th scope="col">Fecha Nacimiento</th>
@@ -15,23 +14,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in usuarios" :key="index">
-            <td>
-              <button class="btn btn-success" @click="perfil(item._id)">
-                🙎‍♂️
-              </button>
-            </td>
-            <td>{{ item.nombre }}</td>
-            <td>{{ item.usuario }}</td>
-            <td>{{ item.fechaNacimiento.substring(0,10) }}</td>
-            <td v-if="item.tatuador == true">tatuador</td>
+        <tr>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.usuario }}</td>
+            <td>{{ usuario.fechaNacimiento.substring(0,10) }}</td>
+            <td v-if="usuario.tatuador == true">tatuador</td>
             <td v-else>cliente</td>
-            <td>{{ item.password }}</td>
-            <td>{{ item.citas.length }}</td>
+            <td>{{ usuario.password }}</td>
+            <td>{{ usuario.citas.length }}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <button @click="editarUsuario(item._id)" class="btn btn-warning" title="edit">🛠</button> 
-              <button @click="eliminarUsuario(item._id)" class="btn btn-danger" title="delete">💥</button>
+              <b-button @click="editarUsuario(usuario._id)" class="btn-warning" title="edit">🛠</b-button> 
+              <b-button @click="eliminarUsuario(usuario._id)" class="btn-danger" title="delete">💥</b-button>
             </div>
           </td>
         </tr>
@@ -45,7 +39,6 @@
 export default {
   data() {
     return {
-      usuarios: [],
       dismissSecs: 5,
       dismissCountDown: 0,
       mensaje: {
@@ -64,24 +57,21 @@ export default {
     };
   },
   created() {
-    this.listarUsuarios();
+    const id = (location.href).split('?id=')[1];
+      this.axios.get("usuarios/listar/"+id)
+      .then(res => {
+        //console.log(typeof(res.data.fechaNacimiento));  
+        this.usuario = res.data;
+      })
+      .catch(e => {
+        console.log(e.response);
+      })
   },
   methods: {
     alerta() {
       this.mensaje.color = "success";
       this.mensaje.texto = "Usuario agregado con exito! ";
       this.showAlert();
-    },
-    listarUsuarios() {
-      this.axios
-        .get("/usuarios/listar")
-        .then((res) => {
-          //   console.log(res);
-          this.usuarios = res.data;
-        })
-        .catch((e) => {
-          console.log(e.response);
-        });
     },
     editarUsuario(id){
       window.location.href="/usuarios/editar?id="+id;
@@ -96,10 +86,6 @@ export default {
         this.mensaje.texto = "Usuario eliminado con exito!";
         this.showAlert();
       });
-    },
-    perfil(id){
-      window.location.href="/usuario?id=" + id;
-    
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;

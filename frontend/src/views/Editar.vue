@@ -1,16 +1,15 @@
 <template>
   <div>
-    <h1 class="my-5">Te damos la Bienvenida 👋</h1>
+    <h1 class="my-5">Edición de usuario 🛠</h1>
 
-    <form class="d-flex flex-column container" @submit.prevent="agregarUsuario()">
+    <form class="d-flex flex-column container " @submit.prevent="actualizarUsuario(usuario)">
       <div id="form" class="container px-5 pb-3">
-        <h3 class="mt-3">Nuevo usuario </h3>
+        <h3 class="mt-3">Usuario </h3>
         <input
           type="text"
           class="form-control my-2"
           placeholder="Nombre"
           v-model="usuario.nombre"
-          required
         />
         <div class="d-flex justify-content-center mt-3">
           <p>Tipo de usuario:</p>
@@ -45,7 +44,6 @@
             id="date"
             class="form-control my-2"
             v-model="usuario.fechaNacimiento"
-            required
           />
         </div>
         <div class="d-flex align-items-center">
@@ -57,14 +55,12 @@
           class="form-control my-2"
           placeholder="Nick"
           v-model="usuario.usuario"
-          required
         />
         <input
           type="password"
           class="form-control my-2"
           placeholder="Contraseña"
           v-model="usuario.password"
-          required
         />
       </div>
 
@@ -74,7 +70,7 @@
         class="my-4"
         @click="alerta()"
         type="submit"
-        >Enviar</b-button
+        >Editar</b-button
       >
     </form>
 
@@ -122,40 +118,31 @@ export default {
     };
   },
   created() {
-    
+      const id = (location.href).split('?id=')[1];
+      this.axios.get("usuarios/listar/"+id)
+      .then(res => {
+        this.usuario = res.data;
+      })
+      .catch(e => {
+        console.log(e.response);
+      })
   },
   methods: {
     alerta() {
-      this.mensaje.color = "warning";
-      this.mensaje.texto = "Usuario agregado con exito! 👌";
+      this.mensaje.color = "primary";
+      this.mensaje.texto = "Usuario editado con exito! 👌";
       this.showAlert();
     },
-    agregarUsuario() {
-      //console.log(this.usuario);
-      this.axios.post("/usuarios/nuevo", this.usuario)
-        .then((res) => {
-          this.usuarios.push(res.data);
-          this.usuario.nombre = "";
-          this.usuario.tatuador = false;
-          this.usuario.fotoPerfil = "";
-          this.usuario.fechaNacimiento = new Date();
-          this.usuario.usuario = "";
-          this.usuario.password = "";
-        })
-        .catch((e) => {
-          console.log(e.response);
-        });
-    },
     actualizarUsuario(item){
-      this.axios.put('/usuarios/actualizar/' + item._id, item)
+      this.axios.put('usuarios/actualizar/' + item._id, item)
       .then((res) => {
-        const index = this.usuario.findIndex(n => n._id === res.data._id);
-        this.usuario[index].nombre = "edit";
-        this.usuario[index].tatuador = true;
-        this.usuario[index].fotoPerfil = "edit";
-        this.usuario[index].fechaNacimiento = new Date();
-        this.usuario[index].usuario = "edit";
-        this.usuario[index].password = "edit";
+        let index = this.usuarios.findIndex(n => n._id === res.data._id);
+        this.usuario[index].nombre = res.data.nombre;
+        this.usuario[index].tatuador = res.data.tatuador;
+        this.usuario[index].fotoPerfil = res.data.fotoPerfil;
+        this.usuario[index].fechaNacimiento = res.data.fechaNacimiento;
+        this.usuario[index].usuario = res.data.usuario;
+        this.usuario[index].password = res.data.password;
       })
       .catch((e) => {
         console.log(e.response);
@@ -164,6 +151,10 @@ export default {
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
+      setTimeout(() => {
+        // this.$router.go(-1);
+        window.location.href = '/usuarios'
+      }, 5000);
     },
     showAlert() {
       this.dismissCountDown = this.dismissSecs;
